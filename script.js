@@ -173,23 +173,46 @@ async function timeoutReject() {
 
 // 7)
 
-const promises = [
-  simulateNetworkRequest(1),
-  simulateNetworkRequest(2),
-  simulateNetworkRequest(3),
-];
-
 async function promiseAny(arr) {
   try {
-    const result = await Promise.any(arr)
+    const result = await Promise.any(arr);
 
-    onSuccess(result)
+    onSuccess(result);
   } catch (error) {
-    onFailure(error)
+    onFailure(error);
   }
 }
 
-promiseAny(promises)
+// promiseAny([
+//  simulateNetworkRequest(1),
+//  simulateNetworkRequest(2),
+//  simulateNetworkRequest(3),
+// ])
 
 // 8)
 
+async function fetchDataInLoop(callback, times) {
+  const results = [];
+
+  for (let i = 0; i < times; i++) {
+    const result = await callback();
+    results.push(result);
+  }
+
+  return results;
+}
+
+// fetchDataInLoop(fetchUserData, 3).then(onSuccess)
+
+// 9)
+
+async function allSettled(arr) {
+  const result = await Promise.allSettled(arr);
+  onSuccess(result);
+}
+
+allSettled([
+  simulateNetworkRequest(1),
+  simulateNetworkRequest(2),
+  simulateNetworkRequest(3),
+]);
